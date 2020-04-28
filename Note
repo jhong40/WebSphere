@@ -1,3 +1,8 @@
+# binaryAuditLogReader
+AdminTask.binaryAuditLogReader(['-fileName', 'myFileName', '-reportMode', 'basic', 
+'-keyStorePassword', 'password123', '-outputLocation', '/binaryLogs'])
+
+
 AdminApp.uninstall(ear)
 
 AdminApp.install(ear)  # cluster, context root
