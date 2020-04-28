@@ -1,0 +1,6 @@
+AdminApp.uninstall(ear)
+
+AdminApp.install(ear)  # cluster, context root
+
+AdminConfig.save()
+
