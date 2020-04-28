@@ -1,3 +1,8 @@
+/u01/app/WebSphere/AppServer/profiles/AppSrv01/bin/osgiCfgInit.sh
+/u01/app/WebSphere/AppServer/bin/clearClassCache.sh
+
+
+
 # binaryAuditLogReader
 AdminTask.binaryAuditLogReader(['-fileName', 'myFileName', '-reportMode', 'basic', 
 '-keyStorePassword', 'password123', '-outputLocation', '/binaryLogs'])
