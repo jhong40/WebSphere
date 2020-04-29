@@ -3,3 +3,10 @@ http://www.awstats.org
 https://github.com/javamelody/javamelody/wiki
 http://www.octopussy.pm
 https://github.com/psi-probe/psi-probe
+
+
+md5sum filename
+sha1sum filname
+sha512sum fname
+
+certUtil -hashfile fn MD5
