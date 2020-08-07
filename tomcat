@@ -1,3 +1,16 @@
+#windows find which process using the port
+C:\Users\cmbuild>netstat -aon | findstr 443
+  TCP    0.0.0.0:443            0.0.0.0:0              LISTENING       1188
+  TCP    [::]:443               [::]:0                 LISTENING       1188
+
+C:\Users\cmbuild>tasklist | findstr  1188
+httpd.exe                     1188 Services                   0      9,792 K
+
+C:\Users\cmbuild>tasklist | findstr httpd
+httpd.exe                     1188 Services                   0      9,792 K
+httpd.exe                     1552 Services                   0    135,908 K
+
+
 Log Analysis
 http://www.awstats.org
 https://github.com/javamelody/javamelody/wiki
