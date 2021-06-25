@@ -1,0 +1,1 @@
+ssh -v -x -o connnecttimeout=1 server1 -p 14850
