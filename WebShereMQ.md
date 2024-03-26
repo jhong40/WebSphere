@@ -1,5 +1,14 @@
+####
+```
+cd /usr/mqm/bin
+./runmqsc NJKAOCDE
+
+DISPLAY Q(MYQ)
+```
+
 #### Browse Message in Q
 ```
+cd /usr/mqm/samp/bin
 ./amqsbcg Q Qmgr 
 ```
 #### Setup MQ Web UI
