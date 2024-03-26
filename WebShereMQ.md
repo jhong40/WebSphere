@@ -16,6 +16,7 @@ https://developer.ibm.com/tutorials/mq-setting-up-using-ibm-mq-console/#step-1-s
 https://www.ibm.com/docs/en/ibm-mq/9.3?topic=api-basic-configuration-mqweb-server
 ```
 cp /usr/mqm/web/mq/samp/configuration/basic_registry.xml    /var/mqm/web/installations/Installation1/servers/mqweb
+#  0. cp basic_registry.xml mqwebuser.xml  (mk a copy mqwebuser.xml before hand)
 #  1. change mqadmin pass
 #  2. <variable name="httpsPort" value="9443"/>
 #  3. <virtualHost allowFromEndpointRef="defaultHttpEndpoint" id="default_host">
