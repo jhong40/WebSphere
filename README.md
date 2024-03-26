@@ -5,7 +5,7 @@
 find . -type f -print0  | xargs -0 sed -i 's/host1/host2/g'  
 ```
 
-# aix
+# AIX
 #### Account reset and unlock
 ```
 lsuser <userid>  # check user info: locked status, unsuccessful_login_count, etc
