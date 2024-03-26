@@ -32,7 +32,7 @@ The socket 0xf100050003820008 is being held by proccess 4325554 (javaw).
 #### RUNMQSC
 ```
 cd /usr/mqm/bin
-./runmqsc NJKAOCDE
+./runmqsc MyQmgr
 
 DISPLAY Q(MYQ)
 ```
