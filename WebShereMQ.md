@@ -1,4 +1,4 @@
-####
+#### RUNMQSC
 ```
 cd /usr/mqm/bin
 ./runmqsc NJKAOCDE
