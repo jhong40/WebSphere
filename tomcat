@@ -1,0 +1,31 @@
+#windows find which process using the port
+C:\Users\cmbuild>netstat -aon | findstr 443
+  TCP    0.0.0.0:443            0.0.0.0:0              LISTENING       1188
+  TCP    [::]:443               [::]:0                 LISTENING       1188
+
+C:\Users\cmbuild>tasklist | findstr  1188
+httpd.exe                     1188 Services                   0      9,792 K
+
+C:\Users\cmbuild>tasklist | findstr httpd
+httpd.exe                     1188 Services                   0      9,792 K
+httpd.exe                     1552 Services                   0    135,908 K
+
+C:\Users\cmbuild>wmic process where "name like '%httpd%'" get processid,commandline
+CommandLine                                             ProcessId
+"C:\apache\Apache24\bin\httpd.exe" -k runservice        1188
+C:\apache\Apache24\bin\httpd.exe -d C:/apache/Apache24  1552
+
+
+
+Log Analysis
+http://www.awstats.org
+https://github.com/javamelody/javamelody/wiki
+http://www.octopussy.pm
+https://github.com/psi-probe/psi-probe
+
+
+md5sum filename
+sha1sum filname
+sha512sum fname
+
+certUtil -hashfile fn MD5

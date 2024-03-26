@@ -1,0 +1,6 @@
+```
+/opt/java/bin/keytool -list -v -keystore ./key.p12 -storepass server1 -storetype PKCS12
+
+keytool -import -alias mycaroot1 -storepass changeit -keystore cacerts -file caroot.crt  # intermediate.cert, server,crt  # this is for jira/confluence
+```
+

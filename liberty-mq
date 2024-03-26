@@ -1,0 +1,250 @@
+
+was
+unzip javaxxx.zip
+ln -s javaxxx java
+java -jar wlpxxx.jar #x,x,default
+
+export JAVA_HOME=/opt/java/jre
+export PATH=./:$JAVA_HOME/bin:$PATH
+
+alias cdserver='cd /opt/wlp/usr/servers/'
+alias cdbin='cd /opt/wlp/bin'
+
+
+
+web
+tar zxvf ihsxxx.tgz
+postinstall.sh
+
+
+
+./server create controller1
+./collective create controller1 --keystorePassword=controller1
+./server start controller1
+
+
+#quickStartSecurity id/pass
+#host=*
+
+
+./server create server1
+./collective join server1 --controller=admin:xxxx@192.168.143.30:9443 --keystorePassword=server1
+./server start server1
+
+./collective testConnection devapp1,/opt/wlp/usr/,server1 --controller=admin:xxx@192.168.143.30:9443 --autoAcceptCertificates
+./collective testConnection devapp1,/opt/wlp/usr/,server1 --controller=admin:xxx@192.168.143.30:9443 --autoAcceptCertificates
+
+
+./server create server2
+./collective join server2 --controller=admin:xxx@192.168.143.30:9443 --keystorePassword=server2
+./collective testConnection devapp2,/opt/wlp/usr/,server2 --controller=admin:xxx@192.168.143.30:9443 --autoAcceptCertificates
+./server start server2
+
+
+
+
+./pluginUtility generate --server=controller1 --cluster=myCluster 
+
+------------------------------
+
+./collective updateHost devwasapp1 --host=192.168.143.30 --port=9443 --user=admin --password=xxx --hostWritePath=/opt/wlp/usr/servers  --hostReadPath=/opt/wlp/usr/servers --hostJavaHome=/opt/java
+
+
+./collective testConnection devwasapp1,/opt/wlp/usr/,server1 --controller=admin:xxx@192.168.143.30:9443 --autoAcceptCertificates
+./collective updateHost devwasapp1 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates
+./collective updateHost devwasapp1 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates
+
+
+
+collective updateHost devwasapp1 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates --rpcUser=jack --rpcUserPassword=liu123$ --sudoUser=wasadmin --useSudo=true
+
+collective updateHost devwasapp2 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates --rpcUser=jack --rpcUserPassword=liu123$ --sudoUser=wasadmin --useSudo=true --hostWritePath=/opt/wlp/ --hostReadPath=/opt/wlp/ --hostJavaHome=/opt/java/jre
+
+
+
+collective updateHost devwasapp1 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates --rpcUser=jack --rpcUserPassword=liu123$ --sudoUser=wasadmin --useSudo=true --hostWritePath=/opt/test/ --hostReadPath=/opt/test/
+
+
+collective updateHost devwasapp2 --controller=admin:xxx@192.168.143.30:9443 --hostWritePath=/opt/wlp/usr/servers --hostReadPath=/opt/wlp/usr/servers --autoAcceptCertificates --rpcUser=jack --rpcUserPassword=liu123$ --sudoUser=wasadmin --useSudo=true --hostWritePath=/opt/test/ --hostReadPath=/opt/test/
+
+
+
+
+Dynamic routing
+controller:
+./dynamicRouting setup --port=9443 --host=localhost --user=admin --password=xxx --keystorePassword=webAS --pluginInstallRoot=/opt/IHS/plugin --webServerNames=webserver1
+
+webserver:
+/opt/IHS/bin/gskcmd -keydb -convert -pw webAS  -db /tmp/plugin-key.p12 -old_format pkcs12 -target /tmp/plugin-key.kdb -new_format cms -stash
+/opt/IHS/bin/gskcmd -cert -setdefault -pw webAS -db /tmp/plugin-key.kdb -label default
+
+
+
+openssl pkcs12 -nokeys -info -in ./key.p12 -passin pass:server1
+/opt/java/bin/keytool -list -v -keystore ./key.p12 -storepass server1 -storetype PKCS12
+
+
+======================================
+Uninstall:
+
+. /opt/mqm/bin/setmqenv -s
+dspmq -o installation
+endmqm QMgrName
+endmqlsr -m QMgrName
+
+rpm -qa | grep MQSeries | xargs rpm -ev
+
+rm /var/mqm
+rm /etc/opt/mqm
+
+
+----------------------------------------
+tar -zxvf *.tar.gz
+ ./mqlicense.sh -accept
+
+rpm -ivh MQ*
+rpm -qa | grep -i mq
+rpm -qa | grep -i mq | grep "9\.1\.0-1"
+rpm -qa | grep -i mq | grep "9\.1\.0-0"
+
+rpm -ev `rpm -qa | grep -i mq | grep "9\.1\.0-1"`
+rpm -ev `rpm -qa | grep -i mq | grep "9\.1\.0-0"`
+
+
+MQ:
+rpm -ivh MQSeriesRuntime-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesJRE-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesJava-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesServer-9.1.0-0.x86_64.rpm
+
+rpm -ivh MQSeriesWeb-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesAMQP-9.1.0-0.x86_64.rpm
+
+rpm -ivh MQSeriesExplorer-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesGSKit-9.1.0-0.x86_64.rpm
+
+rpm -ivh MQSeriesClient-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesMan-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesSamples-9.1.0-0.x86_64.rpm
+rpm -ivh MQSeriesSDK-9.1.0-0.x86_64.rpm
+
+
+devMQ:/opt/mqm/bin # ./setmqinst -i -p /opt/mqm
+143 of 143 tasks have been completed successfully.
+'Installation1' (/opt/mqm) set as the primary installation.
+
+. /opt/mqm/bin/setmqenv -n Installation1  #.bashrc   #setup env variable MQ_INSTALLATION_PATH, etc
+. /opt/mqm/bin/bin/setmqenv -s
+
+crtmqm -q -d MY.DEFAULT.XMIT.QUEUE -u SYSTEM.DEAD.LETTER.QUEUE SATURN.QUEUE.MANAGER
+
+crtmqm QMA
+strmqm QMA
+endmqm QMA
+dltmqm QMA
+
+
+
+
+Local test:
+./amqsput QUEUE1 QMA
+./amqsget QUEUE1 QMA
+
+Remote Test:
+java -Djava.library.path=/opt/mqm/java/lib64 MQIVP
+
+mqm@devMQ:/opt/mqm/samp/wmqjava/samples> /opt/mqm/java/jre64/jre/bin/java -Djava.library.path=/opt/mqm/java/lib64 MQSample
+mqm@devMQ:/opt/mqm/samp/wmqjava/samples> /opt/mqm/java/jre64/jre/bin/java -Djava.library.path=/opt/mqm/java/lib64 MQIVP
+
+
+192.168.143.29
+1414
+
+
+SYSTEM.DEF.SVRCONN
+QMA
+
+
+
+strweb
+endweb
+
+/var/mqm/web/installations/Installation1/servers/mqweb/mqwebuser.xml
+
+
+
+
+setmqaut -m QMGR1_POC -t qmgr -p wasadmin +connect +inq +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_01 -p wasadmin +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_02 -p wasadmin +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_03 -p wasadmin +inq +browse +get +put +dsp
+
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_01 -p wasadmin +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_02 -p wasadmin +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_03 -p wasadmin +inq +browse +get +put +dsp
+
+
+
+setmqaut -m QMA -t qmgr -p wasadmin +connect +inq +dsp
+dspmqaut  -m QMA -t qmgr -p wasadmin
+
+setmqaut -m QMA -t q -n Q1 -p wasadmin +inq +browse +get +put +dsp
+dspmqaut  -m QMA -t q -n Q1 -p wasadmin
+
+
+setmqaut -m QMGR1_POC -t qmgr -p ptummala +connect +inq +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_01 -p ptummala +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_02 -p ptummala +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_Queue_03 -p ptummala +inq +browse +get +put +dsp
+
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_01 -p ptummala +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_02 -p ptummala +inq +browse +get +put +dsp
+setmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_03 -p ptummala +inq +browse +get +put +dsp
+
+
+dspmqaut -m QMGR1_POC -t qmgr -p system
+dspmqaut -m QMGR1_POC -t q -n QMGR1_Queue_01 -p system
+dspmqaut -m QMGR1_POC -t q -n QMGR1_TOPIC_01 -p system
+
+
+
+Liberty Test App:
+
+#
+display Qmgr   CHLAUTH
+alter  Qmgr   CHLAUTH(DISABLED)
+
+#
+display qmgr CONNAUTH
+display authinfo(SYSTEM.DEFAULT.AUTHINFO.IDPWOS)
+
+ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) CHCKCLNT(OPTIONAL)
+
+ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) CHCKCLNT(NONE)
+
+REFRESH SECURITY TYPE(CONNAUTH)
+
+
+app1:
+/opt/wlp/usr/servers/WMQClientSample
+
+http://192.168.143.35:9117/MQSample/
+
+
+$ cat startmq.sh
+cd /usr/mqm/bin
+strmqm QMGR1
+runmqlsr -m QMA -t TCP -p 1414 &
+runmqchl -c  QMGR1.QMGR2 -m QMGR1 &
+
+
+$ cat stopmq.sh
+cd /usr/mqm/bin
+endmqm QMGR1
+endmqlsr -m QMGR1 -t TCP -p 1417
+
+
+
+
+
+

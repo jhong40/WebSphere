@@ -1,0 +1,45 @@
+/u01/app/WebSphere/AppServer/profiles/AppSrv01/bin/osgiCfgInit.sh
+/u01/app/WebSphere/AppServer/bin/clearClassCache.sh
+
+
+
+# binaryAuditLogReader
+AdminTask.binaryAuditLogReader(['-fileName', 'myFileName', '-reportMode', 'basic', 
+'-keyStorePassword', 'password123', '-outputLocation', '/binaryLogs'])
+
+
+AdminApp.uninstall(ear)
+
+AdminApp.install(ear)  # cluster, context root
+
+AdminConfig.save()
+
+dep=AdminConfig.getid("/Deployment:"+ear+"/")
+depObject = AdminConfig.showAttribute(dep, "deployedObject")
+AdminConfig.modify(depObject, [['startingWeight', i]])
+print(AdminConfig.show(depObject, 'startingWeight'))
+AdminConfig.save()
+
+
+dmgrbean=AdminControl.completeObjectName('WebSphere:name=DeploymentManager,process=dmgr,*')
+AdminControl.invoke(dmgrbean, 'multiSync', '[false]', '[java.lang.Boolean]' )
+print("\n----Sync completed...")
+
+
+  AdminControl.stopServer(server1,node1,'terminate')
+  AdminControl.stopServer(server2,node2,'terminate')
+  
+  AdminControl.startServer(server1, node1, 5)
+AdminControl.startServer(server2, node2, 5)
+
+    serverjvm1 = AdminControl.queryNames('WebSphere:type=Server,name='+server1+',*')
+    state1 = AdminControl.getAttribute(serverjvm1, "state")
+    print(server1 + " " + state1)
+    if (state1=="STARTED"):
+      f1=1
+    serverjvm2 = AdminControl.queryNames('WebSphere:type=Server,name='+server2+',*')
+    state2 = AdminControl.getAttribute(serverjvm2, "state")
+    print(server2 + " " + state2)
+    if (state2=="STARTED"):
+      f2=1
+#

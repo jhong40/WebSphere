@@ -1,0 +1,16 @@
+IIM install:
+./userinstc -c
+/tmp/InstallationManager/eclipse
+
+WAS/Java Install:
+./imcl  install com.ibm.websphere.ND.v90_9.0.0.20160526_1854 com.ibm.java.jdk.v8_8.0.3000.20160526_1317  -repositories /tmp/was-iim-install/WAS_ND_V9.0_MP_ML,/tmp/was-iim-install/sdk.repo.8030.java8.linux -installationDirectory /tmp/WebSphere/AppServer -sharedResourcesDirectory /tmp/IMShared -acceptLicense -prompt  -showProgress
+
+./imcl  install com.ibm.websphere.ND.v90_9.0.11.20190312_2048  -repositories /tmp/was-iim-install/9.0.0-WS-WAS-FP011 -acceptLicense -prompt  -showProgress
+
+./manageprofiles.sh -create -templatePath /tmp/WebSphere/profileTemplates/management  -hostName NV-DEVMQ -profileName Dmgr01 -enableAdminSecurity true -adminUserName wasadmin -adminPassword asdf1234
+./manageprofiles.sh -create -templatePath /tmp/WebSphere/profileTemplates/managed   -profileName Custom01
+./addNode.sh NV-DEVMQ -user wasadmin -password asdf1234
+
+
+./manageprofiles.sh -deleteAll
+./manageprofiles.sh -validateAndUpdateRegistry

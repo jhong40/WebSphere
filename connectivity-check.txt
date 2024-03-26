@@ -1,0 +1,9 @@
+ ssh  -x -v -o connecttimeout=1 server1 -p 6010
+ telnet server1 6010
+ openssl s_client -connect server1:6010
+ nc -zv server1 6010
+ 
+ 
+ Powershell
+ Test-netConnection 1.1.1.1 -port 23
+
