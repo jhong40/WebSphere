@@ -1,5 +1,12 @@
 # WebSphere
+```
+already have java 8.0.8.21 installed. After that, run this to install 8.0.8.35 on top of it.
+imcl install com.ibm.java.jdk.v8_8.0.8035.xxxxx \
+  -repositories /opt/IBM_JAVASDK_8.0-8.35_Linux64 \
+  -installationDirectory /opt/WebSphere/Appserver \
+  -acceptLicense
 
+```
 ```
 # find all the file under . and replace aaa with bbb
 find . -type f -print0  | xargs -0 sed -i 's/host1/host2/g'  
