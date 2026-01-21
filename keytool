@@ -10,3 +10,145 @@ keytool -import -alias intermediate-2025 -storepass changeit -keystore cacerts -
 
 ```
 
+
+how to extract the only the certificates from password protected jks file and import those certificates and create another jks file without password ?
+
+You can do this safely and cleanly with keytool, as long as you understand one key rule:
+
+🔴 You can extract certificates (public certs) without private keys
+🔴 You CANNOT create a password-less keystore that contains private keys
+
+So the result will be a truststore (certs only), which can have an empty password.
+
+Overview (what we’ll do)
+
+List all certificate aliases in the original password-protected JKS
+
+Export only certificates (no private keys)
+
+Import them into a new JKS with empty password
+
+Step 1: List certificate aliases
+keytool -list -v -keystore source.jks
+
+
+Enter the password when prompted.
+
+Look for entries like:
+
+Entry type: trustedCertEntry
+
+
+or
+
+Entry type: PrivateKeyEntry
+
+
+⚠️ Even PrivateKeyEntry contains a certificate chain — exporting the cert is allowed.
+
+Take note of the alias names.
+
+Step 2: Export certificates (one by one)
+
+Export only the public certificate:
+
+keytool -exportcert \
+  -alias myalias \
+  -keystore source.jks \
+  -rfc \
+  -file myalias.crt
+
+
+You’ll be prompted for the source keystore password
+
+-rfc gives PEM format (recommended)
+
+Repeat for each alias.
+
+👉 If you want all certs, you must loop (keytool has no “export all” command).
+
+Linux / macOS loop example
+for a in alias1 alias2 alias3; do
+  keytool -exportcert -alias "$a" -keystore source.jks -rfc -file "$a.crt"
+done
+
+Windows CMD example
+for %a in (alias1 alias2 alias3) do (
+  keytool -exportcert -alias %a -keystore source.jks -rfc -file %a.crt
+)
+
+Step 3: Create a new JKS with NO password
+
+Import the certificates into a new JKS:
+
+keytool -importcert \
+  -alias myalias \
+  -file myalias.crt \
+  -keystore target.jks \
+  -storepass ""
+  -noprompt
+
+
+✔ This creates:
+
+A certificate-only JKS
+
+With empty password
+
+No private keys
+
+Repeat for all certs.
+
+Step 4: Verify the new keystore has no password
+keytool -list -keystore target.jks -storepass ""
+
+
+You should see:
+
+Entry type: trustedCertEntry
+
+
+No password prompt.
+
+Important warnings ⚠️
+❌ You cannot do this with private keys
+
+If the source JKS contains:
+
+Entry type: PrivateKeyEntry
+
+
+The private key cannot be imported into a password-less keystore
+
+Java requires passwords for private keys
+
+This is by design.
+
+Optional: Use PKCS12 as an intermediate (advanced)
+
+If you’re dealing with mixed formats or Java 9+:
+
+keytool -importkeystore \
+  -srckeystore source.jks \
+  -srcstoretype JKS \
+  -destkeystore temp.p12 \
+  -deststoretype PKCS12
+
+
+Then extract certs from the PKCS12 and re-import as above.
+
+Final Result
+File	Contents	Password
+source.jks	certs + maybe private keys	required
+target.jks	certificates only	empty
+
+If you want, tell me:
+
+Java version
+
+OS (Windows/Linux)
+
+Whether you want only CA certs or all certs
+
+I can tailor the exact commands for your environment.
+
