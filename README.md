@@ -1,3 +1,11 @@
+# Ikeyman
+```
+gskcapicmd -keydb -changepw -db key.kdb -stashed -new_pw NEWPASSWORD   # kdb+sth (without password) => new password
+gskcapicmd -keydb -stashpw  -db key.kdb -pw NEWPASSWORD   # using new password -> new sth
+```
+
+
+
 # WebSphere
 ```
 already have java 8.0.8.21 installed. After that, run this to install 8.0.8.35 on top of it.
