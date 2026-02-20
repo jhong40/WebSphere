@@ -1,4 +1,4 @@
-# Ikeyman
+# Ikeyman (forget the password)
 ```
 gskcapicmd -keydb -changepw -db key.kdb -stashed -new_pw NEWPASSWORD   # kdb+sth (without password) => new password
 gskcapicmd -keydb -stashpw  -db key.kdb -pw NEWPASSWORD   # using new password -> new sth
